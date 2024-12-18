@@ -1,6 +1,6 @@
 <template>
   <div
-    class="d-flex align-center justify-space-between ga-4 pa-4 rounded-lg"
+    class="d-flex align-center justify-space-between ga-4 pa-5 rounded-lg"
     :style="
       props.state === 'completed'
         ? 'background-color: #A0ECB1;'
@@ -20,12 +20,24 @@
       <i v-if="props.icon === 'chat'">💬</i>
     </div>
     <div class="flex-1-1 d-flex flex-column justify-center">
-      <h3 v-if="props.state === 'pending'" class="text-h6">Task To Do</h3>
-      <h3 v-if="props.state === 'in_progress'" class="text-h6">Task in Progress</h3>
-      <h3 v-if="props.state === 'completed'" class="text-h6">Task Completed</h3>
-      <h3 v-if="props.state === 'wont_do'" class="text-h6">Task Won’t Do</h3>
+      <h3 v-if="props.state === 'pending'" class="font-weight-bold" style="font-size: 1.3rem">
+        Task To Do
+      </h3>
+      <h3 v-if="props.state === 'in_progress'" class="font-weight-bold" style="font-size: 1.3rem">
+        Task in Progress
+      </h3>
+      <h3 v-if="props.state === 'completed'" class="font-weight-bold" style="font-size: 1.3rem">
+        Task Completed
+      </h3>
+      <h3 v-if="props.state === 'wont_do'" class="font-weight-bold" style="font-size: 1.3rem">
+        Task Won’t Do
+      </h3>
 
-      <p v-if="props.state === 'pending'" style="margin-right: 180px" class="text-body-1">
+      <p
+        v-if="props.state === 'pending'"
+        style="margin-right: 35%; width: auto"
+        class="font-weight-light"
+      >
         {{ props.description }}
       </p>
     </div>

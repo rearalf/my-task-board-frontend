@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import EditDuotone from './components/icons/EditDuotone.vue'
+import NewTaskCard from './components/NewTaskCard.vue'
 import LogoSVG from './components/icons/LogoSVG.vue'
 import TaskCard from './components/TaskCardk.vue'
 </script>
@@ -17,11 +18,12 @@ import TaskCard from './components/TaskCardk.vue'
       </v-btn>
     </div>
     <main class="mt-8 d-flex flex-column ga-6">
-      <TaskCard :icon="'gym'" :state="'in_progress'" />
+      <NewTaskCard />
+      <TaskCard :icon="'alarm'" :state="'in_progress'" />
       <TaskCard :icon="'gym'" :state="'completed'" />
-      <TaskCard :icon="'gym'" :state="'wont_do'" />
+      <TaskCard :icon="'coffee'" :state="'wont_do'" />
       <TaskCard
-        :icon="'gym'"
+        :icon="'book'"
         :description="'Work on a Challenge on devChallenges.io, learn TypeScript.'"
         :state="'pending'"
       />
