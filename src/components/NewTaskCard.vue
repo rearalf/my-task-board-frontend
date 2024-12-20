@@ -2,7 +2,7 @@
   <button
     class="d-flex align-center ga-4 pa-5 rounded-lg custom-btn"
     style="background-color: #f5e8d5"
-    @click="() => console.log('Hello')"
+    @click="handleClick"
   >
     <i class="d-flex justify-center align-center pa-3 rounded-lg" style="background-color: #e9a23b">
       <AddRoundDuotone />
@@ -19,6 +19,10 @@ export default {
 
 <script setup lang="ts">
 import AddRoundDuotone from './icons/AddRoundDuotone.vue'
+
+const emit = defineEmits(['update:handleDrawer'])
+
+const handleClick = () => emit('update:handleDrawer', true)
 </script>
 
 <style scoped>
