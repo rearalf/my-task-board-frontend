@@ -6,3 +6,14 @@ export enum TaskStatus {
   COMPLETED = 'completed',
   PENDING = 'pending',
 }
+
+export type ITasksDataService = {
+  id: number
+  title: string
+  description: string
+  status: TaskStatus
+  icon: ITypeIcon
+  create_at: Date
+  update_at: Date
+  deleted_at: null
+}

@@ -4,16 +4,24 @@ import EditDuotone from './components/icons/EditDuotone.vue'
 import NewTaskCard from './components/NewTaskCard.vue'
 import LogoSVG from './components/icons/LogoSVG.vue'
 import TaskCard from './components/TaskCardk.vue'
-import { ref, watch } from 'vue'
-import type { ITypeIcon } from './interfaces/interfaces'
+import { onMounted, ref } from 'vue'
+import type { ITasksDataService, ITypeIcon } from './interfaces/interfaces'
 import { TaskStatus } from './interfaces/interfaces'
+import taskService from './api/task.service'
 
-const handleDrawer = ref<boolean>(true)
+const handleDrawer = ref<boolean>(false)
 const taskIcon = ref<ITypeIcon>('')
 const taskState = ref<TaskStatus>(TaskStatus.PENDING)
 
+const tasks = ref<ITasksDataService[]>([])
+
 const toggleDrawer = (value: boolean) => (handleDrawer.value = value)
 const handleChangeState = (state: TaskStatus) => (taskState.value = state)
+
+onMounted(async () => {
+  const allTask = await taskService.getAllTaskService()
+  tasks.value = allTask
+})
 </script>
 
 <template>
@@ -36,16 +44,16 @@ const handleChangeState = (state: TaskStatus) => (taskState.value = state)
           <EditDuotone />
         </v-btn>
       </div>
+
       <main class="mt-8 d-flex flex-column ga-6">
         <NewTaskCard @update:handleDrawer="toggleDrawer" />
-        <!-- <TaskCard :icon="'alarm'" :state="'in_progress'" />
-        <TaskCard :icon="'gym'" :state="'completed'" />
-        <TaskCard :icon="'coffee'" :state="'wont_do'" />
         <TaskCard
-          :icon="'book'"
-          :description="'Work on a Challenge on devChallenges.io, learn TypeScript.'"
-          :state="'pending'"
-        /> -->
+          v-for="task of tasks"
+          :key="task.id"
+          :icon="task.icon"
+          :state="task.status"
+          :description="task.description"
+        />
       </main>
     </v-container>
   </v-app>

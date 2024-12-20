@@ -168,7 +168,8 @@ const drawer = defineModel('drawer', { default: false, required: true, type: Boo
 const taskIcon = defineModel('taskIcon', {
   required: true,
   type: String,
-  validator: (value: string) => ['gym', 'alarm', 'coffee', 'work', 'book', 'chat'].includes(value),
+  validator: (value: string) =>
+    ['gym', 'alarm', 'coffee', 'work', 'book', 'chat', ''].includes(value),
 })
 const taskState = defineModel('taskState', {
   required: true,
