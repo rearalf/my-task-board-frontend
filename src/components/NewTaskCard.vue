@@ -2,7 +2,7 @@
   <button
     class="d-flex align-center ga-4 pa-5 rounded-lg custom-btn"
     style="background-color: #f5e8d5"
-    @click="handleClick"
+    @click="toggleDrawer"
   >
     <i class="d-flex justify-center align-center pa-3 rounded-lg" style="background-color: #e9a23b">
       <AddRoundDuotone />
@@ -18,11 +18,14 @@ export default {
 </script>
 
 <script setup lang="ts">
+import useTaskForm from '../stores/taskForm'
 import AddRoundDuotone from './icons/AddRoundDuotone.vue'
 
-const emit = defineEmits(['update:handleDrawer'])
+const taskForm = useTaskForm()
 
-const handleClick = () => emit('update:handleDrawer', true)
+const toggleDrawer = () => {
+  taskForm.handleDrawer()
+}
 </script>
 
 <style scoped>

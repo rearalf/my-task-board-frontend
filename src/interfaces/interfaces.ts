@@ -17,3 +17,10 @@ export type ITasksDataService = {
   update_at: Date
   deleted_at: null
 }
+
+export type ITasksForm = {
+  title: string
+  description: string
+  status: TaskStatus
+  icon: ITypeIcon
+}

@@ -5,18 +5,11 @@ import NewTaskCard from './components/NewTaskCard.vue'
 import LogoSVG from './components/icons/LogoSVG.vue'
 import TaskCard from './components/TaskCardk.vue'
 import { onMounted, ref } from 'vue'
-import type { ITasksDataService, ITypeIcon } from './interfaces/interfaces'
-import { TaskStatus } from './interfaces/interfaces'
+import type { ITasksDataService } from './interfaces/interfaces'
+
 import taskService from './api/task.service'
 
-const handleDrawer = ref<boolean>(false)
-const taskIcon = ref<ITypeIcon>('')
-const taskState = ref<TaskStatus>(TaskStatus.PENDING)
-
 const tasks = ref<ITasksDataService[]>([])
-
-const toggleDrawer = (value: boolean) => (handleDrawer.value = value)
-const handleChangeState = (state: TaskStatus) => (taskState.value = state)
 
 onMounted(async () => {
   const allTask = await taskService.getAllTaskService()
@@ -26,13 +19,7 @@ onMounted(async () => {
 
 <template>
   <v-app>
-    <NavigationDrawer
-      :task-icon="taskIcon"
-      :drawer="handleDrawer"
-      :task-state="taskState"
-      @update:handleDrawer="toggleDrawer"
-      @change:handle-state="handleChangeState"
-    />
+    <NavigationDrawer />
     <v-container>
       <div class="d-flex ga-4 align-center mb-4">
         <LogoSVG />
@@ -46,7 +33,7 @@ onMounted(async () => {
       </div>
 
       <main class="mt-8 d-flex flex-column ga-6">
-        <NewTaskCard @update:handleDrawer="toggleDrawer" />
+        <NewTaskCard />
         <TaskCard
           v-for="task of tasks"
           :key="task.id"

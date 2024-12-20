@@ -1,9 +1,9 @@
 <template>
   <v-navigation-drawer
-    v-model="drawer"
+    v-model="taskForm.openDrawer"
     style="height: 96vh; top: 2%; bottom: 2%"
     class="rounded-lg pa-4 d-flex"
-    :style="!drawer && 'transform: translateX(100vw)'"
+    :style="!taskForm.openDrawer && 'transform: translateX(100vw)'"
     persistent
     floating
     temporary
@@ -15,7 +15,7 @@
         <v-btn
           border
           variant="text"
-          @click="handleClick"
+          @click="taskForm.handleDrawer"
           style="min-width: auto"
           class="px-2 h-auto w-auto rounded-lg"
           id="btn-close"
@@ -44,6 +44,7 @@
                 style="border: 0.15rem solid #00000033"
                 placeholder="Task name"
                 id="name"
+                v-model="taskForm.newTask.title"
               />
             </div>
 
@@ -58,9 +59,10 @@
               <textarea
                 type="text"
                 id="description"
+                v-model="taskForm.newTask.description"
+                placeholder="Enter a short description"
                 class="input-field rounded-lg pa-3 py-2"
                 style="border: 0.15rem solid #00000033; min-height: 8rem; resize: none"
-                placeholder="Enter a short description"
               />
             </div>
 
@@ -69,19 +71,19 @@
               <div class="d-flex ga-4">
                 <label
                   style="font-size: 1.5rem; background-color: #e3e8ef"
-                  v-for="option in iconsOptions"
+                  v-for="option in ICONSOPTIONS"
                   :key="option.iconName"
                   class="pa-1 rounded-lg"
-                  :style="taskIcon === option.iconName && 'background-color: #F5D565'"
-                  :for="'icon-' + option.iconName"
+                  :style="taskForm.newTask.icon === option.iconName && 'background-color: #F5D565'"
+                  :for="option.iconName"
                 >
                   <input
                     type="radio"
-                    name="icon"
-                    :id="'icon-' + option.iconName"
-                    :value="option.iconName"
                     class="d-none"
-                    v-model="taskIcon"
+                    :id="option.iconName"
+                    v-model="taskForm.newTask.icon"
+                    :name="option.iconName"
+                    :value="option.iconName"
                   />
                   {{ option.icon }}
                 </label>
@@ -92,16 +94,12 @@
               <h3 style="color: #97a3b6; font-size: 0.875rem" class="font-weight-medium">Status</h3>
 
               <div class="grid-state">
-                <label
-                  v-for="option in taskStateOptions"
-                  :key="option.state"
-                  :for="'state-' + option.state"
-                >
+                <label v-for="option in TASKSSTATUSOPTIONS" :key="option.state" :for="option.state">
                   <v-card
                     class="bg-white"
                     style="box-shadow: none; border-radius: 1rem"
                     :style="
-                      option.state === taskState
+                      option.state === taskForm.newTask.status
                         ? 'border: 2px solid #3662E3'
                         : 'border: 2px solid #00000033'
                     "
@@ -123,19 +121,18 @@
                         <TimeAtackDuotone v-if="option.state === 'in_progress'" />
                       </span>
                       <input
-                        name="state"
                         type="radio"
                         class="d-none"
+                        :id="option.state"
+                        :name="option.state"
                         :value="option.state"
-                        v-model="taskState"
-                        :id="'state-' + option.state"
-                        @change="updateTaskState(option.state)"
+                        v-model="taskForm.newTask.status"
                       />
 
                       <p class="flex-1-1">{{ option.nameState }}</p>
 
                       <span
-                        v-if="option.state === taskState"
+                        v-if="option.state === taskForm.newTask.status"
                         class="d-flex align-center justify-center rounded-xl mr-2"
                         style="background-color: #3662e3"
                       >
@@ -147,6 +144,7 @@
               </div>
             </div>
           </div>
+
           <div class="d-flex justify-end ga-3 mb-1">
             <v-btn style="background-color: #00000033" class="rounded-xl text-white">
               <span class="d-flex ga-2"> Delete <TrashSVG /> </span>
@@ -174,51 +172,10 @@ import DoneRound from './icons/DoneRound.vue'
 import DoneRoundDuotone from './icons/DoneRoundDuotone.vue'
 import TimeAtackDuotone from './icons/TimeAtackDuotone.vue'
 import TrashSVG from './icons/TrashSVG.vue'
+import useTaskForm from '../stores/taskForm'
+import { ICONSOPTIONS, TASKSSTATUSOPTIONS } from '../utils/constants'
 
-const drawer = defineModel('drawer', { default: false, required: true, type: Boolean })
-const taskIcon = defineModel('taskIcon', {
-  required: true,
-  type: String,
-  validator: (value: string) =>
-    ['gym', 'alarm', 'coffee', 'work', 'book', 'chat', ''].includes(value),
-})
-const taskState = defineModel('taskState', {
-  required: true,
-  type: String,
-  validator: (value: string) => ['wont_do', 'in_progress', 'completed', 'pending'].includes(value),
-})
-
-const emit = defineEmits(['update:handleDrawer', 'change:handleState'])
-
-const handleClick = () => emit('update:handleDrawer', false)
-
-const updateTaskState = (state: string) => {
-  emit('change:handleState', state)
-}
-
-const iconsOptions = [
-  { iconName: 'work', icon: '👨🏻‍💻' },
-  { iconName: 'chat', icon: '💬' },
-  { iconName: 'coffee', icon: '☕' },
-  { iconName: 'gym', icon: '🏋️' },
-  { iconName: 'book', icon: '📚' },
-  { iconName: 'alarm', icon: '⏰' },
-]
-
-const taskStateOptions = [
-  {
-    state: 'in_progress',
-    nameState: 'In Progress',
-  },
-  {
-    state: 'completed',
-    nameState: 'Completed',
-  },
-  {
-    state: 'wont_do',
-    nameState: "Won't do",
-  },
-]
+const taskForm = useTaskForm()
 </script>
 
 <style>
