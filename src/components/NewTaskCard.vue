@@ -7,7 +7,7 @@
     <i class="d-flex justify-center align-center pa-3 rounded-lg" style="background-color: #e9a23b">
       <AddRoundDuotone />
     </i>
-    <h3 class="font-weight-bold">Add new task</h3>
+    <h2 style="font-size: 1.3rem" class="font-weight-bold">Add new task</h2>
   </button>
 </template>
 

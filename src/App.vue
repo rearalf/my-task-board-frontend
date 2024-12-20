@@ -40,9 +40,9 @@ onMounted(async () => {
           <h1 className="font-weight-regular" style="font-size: 2.5rem">My Task Board</h1>
           <p class="font-weight-regular">Tasks to keep organised</p>
         </div>
-        <v-btn variant="text" style="box-shadow: none; min-width: auto" class="pa-2 rounded-circle">
+        <i class="pa-2 rounded-circle d-flex align-center">
           <EditDuotone />
-        </v-btn>
+        </i>
       </div>
 
       <main class="mt-8 d-flex flex-column ga-6">

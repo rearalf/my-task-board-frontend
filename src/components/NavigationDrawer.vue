@@ -18,6 +18,8 @@
           @click="handleClick"
           style="min-width: auto"
           class="px-2 h-auto w-auto rounded-lg"
+          id="btn-close"
+          aria-label="close-button"
         >
           <CloseRingDuotone1 />
         </v-btn>
@@ -41,12 +43,13 @@
                 class="input-field rounded-lg pa-3 py-2"
                 style="border: 0.15rem solid #00000033"
                 placeholder="Task name"
+                id="name"
               />
             </div>
 
             <div class="d-flex flex-column ga-1">
               <label
-                for="name"
+                for="description"
                 style="color: #97a3b6; font-size: 0.875rem"
                 class="font-weight-medium"
               >
@@ -54,6 +57,7 @@
               </label>
               <textarea
                 type="text"
+                id="description"
                 class="input-field rounded-lg pa-3 py-2"
                 style="border: 0.15rem solid #00000033; min-height: 8rem; resize: none"
                 placeholder="Enter a short description"
@@ -69,10 +73,12 @@
                   :key="option.iconName"
                   class="pa-1 rounded-lg"
                   :style="taskIcon === option.iconName && 'background-color: #F5D565'"
+                  :for="'icon-' + option.iconName"
                 >
                   <input
                     type="radio"
                     name="icon"
+                    :id="'icon-' + option.iconName"
                     :value="option.iconName"
                     class="d-none"
                     v-model="taskIcon"
@@ -86,7 +92,11 @@
               <h3 style="color: #97a3b6; font-size: 0.875rem" class="font-weight-medium">Status</h3>
 
               <div class="grid-state">
-                <label v-for="option in taskStateOptions" :key="option.state">
+                <label
+                  v-for="option in taskStateOptions"
+                  :key="option.state"
+                  :for="'state-' + option.state"
+                >
                   <v-card
                     class="bg-white"
                     style="box-shadow: none; border-radius: 1rem"
@@ -118,6 +128,7 @@
                         class="d-none"
                         :value="option.state"
                         v-model="taskState"
+                        :id="'state-' + option.state"
                         @change="updateTaskState(option.state)"
                       />
 
