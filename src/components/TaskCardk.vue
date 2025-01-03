@@ -1,5 +1,6 @@
 <template>
-  <div
+  <button
+    @click="handleOpenDrawer"
     class="d-flex align-center justify-space-between ga-4 pa-5 rounded-lg"
     :style="
       props.state === 'completed'
@@ -19,7 +20,7 @@
       <i v-if="props.icon === 'book'">📚</i>
       <i v-if="props.icon === 'chat'">💬</i>
     </div>
-    <div class="flex-1-1 d-flex flex-column justify-center">
+    <div class="flex-1-1 d-flex flex-column justify-center align-start">
       <h3 v-if="props.state === 'pending'" class="font-weight-bold" style="font-size: 1.3rem">
         Task To Do
       </h3>
@@ -58,7 +59,7 @@
         <CloseRingDuotone v-if="props.state === 'wont_do'" />
       </i>
     </div>
-  </div>
+  </button>
 </template>
 
 <script lang="ts">
@@ -72,7 +73,14 @@ import CloseRingDuotone from './icons/CloseRingDuotone.vue'
 import DoneRoundDuotone from './icons/DoneRoundDuotone.vue'
 import TimeAtackDuotone from './icons/TimeAtackDuotone.vue'
 
+import useTaskForm from '../stores/taskForm'
+const taskForm = useTaskForm()
+
 const props = defineProps({
+  id: {
+    type: Number,
+    required: true,
+  },
   title: {
     type: String,
     default: '',
@@ -94,4 +102,13 @@ const props = defineProps({
       ['wont_do', 'in_progress', 'completed', 'pending'].includes(value),
   },
 })
+
+const handleOpenDrawer = () => {
+  taskForm.handleDrawer()
+  taskForm.newTaskId = props.id
+  taskForm.newTaskTitle = props.title
+  taskForm.newTaskDescription = props.description
+  taskForm.newTaskIcon = props.icon
+  taskForm.newTaskStatus = props.state
+}
 </script>

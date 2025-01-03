@@ -36,8 +36,10 @@ onMounted(async () => {
         <NewTaskCard />
         <TaskCard
           v-for="task of tasks"
+          :id="task.id"
           :key="task.id"
           :icon="task.icon"
+          :title="task.title"
           :state="task.status"
           :description="task.description"
         />

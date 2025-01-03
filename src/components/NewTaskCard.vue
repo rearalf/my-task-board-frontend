@@ -25,6 +25,7 @@ const taskForm = useTaskForm()
 
 const toggleDrawer = () => {
   taskForm.handleDrawer()
+  taskForm.handleCleanNewTask()
 }
 </script>
 

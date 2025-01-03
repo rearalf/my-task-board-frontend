@@ -10,6 +10,7 @@ const useTaskForm = defineStore('Task', {
     newTaskIcon: ref<ITypeIcon>(NEWTASK.icon),
     newTaskStatus: ref<TaskStatus>(NEWTASK.status),
     openDrawer: ref<boolean>(false),
+    newTaskId: ref<Number>(0),
   }),
   actions: {
     handleDrawer() {
@@ -20,7 +21,7 @@ const useTaskForm = defineStore('Task', {
       this.newTaskDescription = NEWTASK.description
       this.newTaskIcon = NEWTASK.icon
       this.newTaskStatus = NEWTASK.status
-      console.log(this.newTaskTitle)
+      this.newTaskId = 0
     },
   },
 })
