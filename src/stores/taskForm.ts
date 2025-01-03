@@ -1,11 +1,14 @@
-import { TaskStatus, type ITasksForm } from '@/interfaces/interfaces'
+import { TaskStatus, type ITypeIcon } from '@/interfaces/interfaces'
 import { NEWTASK } from '@/utils/constants'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 const useTaskForm = defineStore('Task', {
   state: () => ({
-    newTask: ref<ITasksForm>(NEWTASK),
+    newTaskTitle: ref<string>(NEWTASK.title),
+    newTaskDescription: ref<string>(NEWTASK.description),
+    newTaskIcon: ref<ITypeIcon>(NEWTASK.icon),
+    newTaskStatus: ref<TaskStatus>(NEWTASK.status),
     openDrawer: ref<boolean>(false),
   }),
   actions: {
@@ -13,7 +16,11 @@ const useTaskForm = defineStore('Task', {
       this.openDrawer = !this.openDrawer
     },
     handleCleanNewTask() {
-      this.newTask = NEWTASK
+      this.newTaskTitle = NEWTASK.title
+      this.newTaskDescription = NEWTASK.description
+      this.newTaskIcon = NEWTASK.icon
+      this.newTaskStatus = NEWTASK.status
+      console.log(this.newTaskTitle)
     },
   },
 })

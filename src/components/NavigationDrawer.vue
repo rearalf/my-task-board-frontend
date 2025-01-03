@@ -39,12 +39,13 @@
                 Task name
               </label>
               <input
+                required
+                id="name"
                 type="text"
+                placeholder="Task name"
                 class="input-field rounded-lg pa-3 py-2"
                 style="border: 0.15rem solid #00000033"
-                placeholder="Task name"
-                id="name"
-                v-model="taskForm.newTask.title"
+                v-model="taskForm.newTaskTitle"
               />
             </div>
 
@@ -57,9 +58,10 @@
                 Description
               </label>
               <textarea
+                required
                 type="text"
                 id="description"
-                v-model="taskForm.newTask.description"
+                v-model="taskForm.newTaskDescription"
                 placeholder="Enter a short description"
                 class="input-field rounded-lg pa-3 py-2"
                 style="border: 0.15rem solid #00000033; min-height: 8rem; resize: none"
@@ -74,14 +76,15 @@
                   v-for="option in ICONSOPTIONS"
                   :key="option.iconName"
                   class="pa-1 rounded-lg"
-                  :style="taskForm.newTask.icon === option.iconName && 'background-color: #F5D565'"
+                  :style="taskForm.newTaskIcon === option.iconName && 'background-color: #F5D565'"
                   :for="option.iconName"
                 >
                   <input
+                    required
                     type="radio"
                     class="d-none"
                     :id="option.iconName"
-                    v-model="taskForm.newTask.icon"
+                    v-model="taskForm.newTaskIcon"
                     :name="option.iconName"
                     :value="option.iconName"
                   />
@@ -99,7 +102,7 @@
                     class="bg-white"
                     style="box-shadow: none; border-radius: 1rem"
                     :style="
-                      option.state === taskForm.newTask.status
+                      option.state === taskForm.newTaskStatus
                         ? 'border: 2px solid #3662E3'
                         : 'border: 2px solid #00000033'
                     "
@@ -121,18 +124,19 @@
                         <TimeAtackDuotone v-if="option.state === 'in_progress'" />
                       </span>
                       <input
+                        required
                         type="radio"
                         class="d-none"
                         :id="option.state"
                         :name="option.state"
                         :value="option.state"
-                        v-model="taskForm.newTask.status"
+                        v-model="taskForm.newTaskStatus"
                       />
 
                       <p class="flex-1-1">{{ option.nameState }}</p>
 
                       <span
-                        v-if="option.state === taskForm.newTask.status"
+                        v-if="option.state === taskForm.newTaskStatus"
                         class="d-flex align-center justify-center rounded-xl mr-2"
                         style="background-color: #3662e3"
                       >
@@ -149,7 +153,11 @@
             <v-btn style="background-color: #00000033" class="rounded-xl text-white">
               <span class="d-flex ga-2"> Delete <TrashSVG /> </span>
             </v-btn>
-            <v-btn style="background-color: #3662e3" class="rounded-xl text-white">
+            <v-btn
+              style="background-color: #3662e3"
+              class="rounded-xl text-white"
+              @click="saveNewTask"
+            >
               <span class="d-flex ga-2"> Save <DoneRound /> </span>
             </v-btn>
           </div>
@@ -174,8 +182,22 @@ import TimeAtackDuotone from './icons/TimeAtackDuotone.vue'
 import TrashSVG from './icons/TrashSVG.vue'
 import useTaskForm from '../stores/taskForm'
 import { ICONSOPTIONS, TASKSSTATUSOPTIONS } from '../utils/constants'
+import taskService from '../api/task.service'
 
 const taskForm = useTaskForm()
+
+const saveNewTask = async () => {
+  const result = await taskService.getNewTaskService({
+    title: taskForm.newTaskTitle,
+    description: taskForm.newTaskDescription,
+    icon: taskForm.newTaskIcon,
+    status: taskForm.newTaskStatus,
+  })
+  if (result.success) {
+    taskForm.handleCleanNewTask()
+    taskForm.handleDrawer()
+  }
+}
 </script>
 
 <style>
