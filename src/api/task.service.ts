@@ -34,7 +34,35 @@ const getNewTaskService = async (newTask: ITasksForm) => {
   }
 }
 
+const deleteTaskService = async (id: number) => {
+  try {
+    const deleteTask = await instance.delete(`/task/${id}`)
+    return {
+      success: true,
+      data: deleteTask,
+    }
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.log(error.response)
+      if (error.response)
+        return {
+          success: false,
+          data: error.response.data,
+        }
+      return {
+        success: false,
+        data: error.cause,
+        statusCode: error.code,
+      }
+    }
+    return {
+      success: false,
+    }
+  }
+}
+
 export default {
   getNewTaskService,
   getAllTaskService,
+  deleteTaskService,
 }

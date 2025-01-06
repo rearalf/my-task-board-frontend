@@ -9,8 +9,9 @@ const useTaskForm = defineStore('Task', {
     newTaskDescription: ref<string>(NEWTASK.description),
     newTaskIcon: ref<ITypeIcon>(NEWTASK.icon),
     newTaskStatus: ref<TaskStatus>(NEWTASK.status),
-    openDrawer: ref<boolean>(false),
     newTaskId: ref<Number>(0),
+
+    openDrawer: ref<boolean>(false),
   }),
   actions: {
     handleDrawer() {

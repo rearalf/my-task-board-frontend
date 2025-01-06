@@ -24,3 +24,20 @@ export type ITasksForm = {
   status: TaskStatus
   icon: ITypeIcon
 }
+
+export type IAlertType = 'error' | 'success' | 'warning' | 'info' | undefined
+
+export enum AlertType {
+  ERROR = 'error',
+  SUCCESS = 'success',
+  WARNING = 'warning',
+  INFO = 'info',
+}
+
+export type IAlertStoneStates = {
+  isVisible: boolean
+  progress: number
+  message: string
+  type: IAlertType
+  duration: number
+}

@@ -150,15 +150,22 @@
           </div>
 
           <div class="d-flex justify-end ga-3 mb-1">
-            <v-btn style="background-color: #00000033" class="rounded-xl text-white">
+            <v-btn
+              @click="deleteTask"
+              class="rounded-xl text-white"
+              style="background-color: #00000033"
+            >
               <span class="d-flex ga-2"> Delete <TrashSVG /> </span>
             </v-btn>
             <v-btn
-              style="background-color: #3662e3"
-              class="rounded-xl text-white"
               @click="saveNewTask"
+              class="rounded-xl text-white"
+              style="background-color: #3662e3"
             >
-              <span class="d-flex ga-2"> Save <DoneRound /> </span>
+              <span class="d-flex ga-2" v-if="taskForm.newTaskId === 0"> Save <DoneRound /> </span>
+              <span class="d-flex ga-2 align-center" v-if="taskForm.newTaskId !== 0">
+                Edit <EditDuotone fill="#FFF" />
+              </span>
             </v-btn>
           </div>
         </form>
@@ -174,17 +181,22 @@ export default {
 </script>
 
 <script setup lang="ts">
-import CloseRingDuotone from './icons/CloseRingDuotone.vue'
+import { ICONSOPTIONS, TASKSSTATUSOPTIONS } from '../utils/constants'
+
 import CloseRingDuotone1 from './icons/CloseRingDuotone1.vue'
-import DoneRound from './icons/DoneRound.vue'
+import CloseRingDuotone from './icons/CloseRingDuotone.vue'
 import DoneRoundDuotone from './icons/DoneRoundDuotone.vue'
 import TimeAtackDuotone from './icons/TimeAtackDuotone.vue'
+import EditDuotone from './icons/EditDuotone.vue'
+import DoneRound from './icons/DoneRound.vue'
 import TrashSVG from './icons/TrashSVG.vue'
-import useTaskForm from '../stores/taskForm'
-import { ICONSOPTIONS, TASKSSTATUSOPTIONS } from '../utils/constants'
+
+import useAlertStone from '../stores/useAlertStone'
 import taskService from '../api/task.service'
+import useTaskForm from '../stores/taskForm'
 
 const taskForm = useTaskForm()
+const alertStone = useAlertStone()
 
 const saveNewTask = async () => {
   const result = await taskService.getNewTaskService({
@@ -196,6 +208,24 @@ const saveNewTask = async () => {
   if (result.success) {
     taskForm.handleCleanNewTask()
     taskForm.handleDrawer()
+    alertStone.showAlert('Tarea creada.', 'success')
+  } else {
+    alertStone.showAlert('Error al crear la tarea.', 'error')
+  }
+}
+
+const deleteTask = async () => {
+  if (taskForm.newTaskId) {
+    const result = await taskService.deleteTaskService(Number(taskForm.newTaskId))
+    if (result.success) {
+      alertStone.showAlert('Tarea eliminada.', 'success')
+      taskForm.handleCleanNewTask()
+      taskForm.handleDrawer()
+    } else {
+      alertStone.showAlert('Error al eliminar la tarea.', 'error')
+    }
+  } else {
+    alertStone.showAlert('Sin tarea seleccionada.', 'warning')
   }
 }
 </script>

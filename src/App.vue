@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import NavigationDrawer from './components/NavigationDrawer.vue'
 import EditDuotone from './components/icons/EditDuotone.vue'
-import NewTaskCard from './components/NewTaskCard.vue'
 import LogoSVG from './components/icons/LogoSVG.vue'
+
+import NavigationDrawer from './components/NavigationDrawer.vue'
+import NewTaskCard from './components/NewTaskCard.vue'
 import TaskCard from './components/TaskCardk.vue'
+import AlertComponent from './components/AlertComponent.vue'
+
 import { onMounted, ref } from 'vue'
+
 import type { ITasksDataService } from './interfaces/interfaces'
 
 import taskService from './api/task.service'
@@ -19,6 +23,7 @@ onMounted(async () => {
 
 <template>
   <v-app>
+    <AlertComponent />
     <NavigationDrawer />
     <v-container>
       <div class="d-flex ga-4 align-center mb-4">
