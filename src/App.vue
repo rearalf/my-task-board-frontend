@@ -7,17 +7,14 @@ import NewTaskCard from './components/NewTaskCard.vue'
 import TaskCard from './components/TaskCardk.vue'
 import AlertComponent from './components/AlertComponent.vue'
 
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 
-import type { ITasksDataService } from './interfaces/interfaces'
+import useTasksStone from './stores/useTasksStone'
 
-import taskService from './api/task.service'
-
-const tasks = ref<ITasksDataService[]>([])
+const tasksStone = useTasksStone()
 
 onMounted(async () => {
-  const allTask = await taskService.getAllTaskService()
-  tasks.value = allTask
+  tasksStone.getAllTasks()
 })
 </script>
 
@@ -40,7 +37,7 @@ onMounted(async () => {
       <main class="mt-8 d-flex flex-column ga-6">
         <NewTaskCard />
         <TaskCard
-          v-for="task of tasks"
+          v-for="task of tasksStone.tasks"
           :id="task.id"
           :key="task.id"
           :icon="task.icon"

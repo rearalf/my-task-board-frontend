@@ -7,7 +7,7 @@ export enum TaskStatus {
   PENDING = 'pending',
 }
 
-export type ITasksDataService = {
+export type ITasksData = {
   id: number
   title: string
   description: string
@@ -40,4 +40,35 @@ export type IAlertStoneStates = {
   message: string
   type: IAlertType
   duration: number
+}
+
+export type ITasksStoneState = {
+  tasks: ITasksData[]
+}
+
+export type getAllTaskServiceReturn = {
+  success: boolean
+  data: ITasksData[]
+  statusCode?: string
+}
+
+export type createNewTaskServiceReturn = {
+  success: boolean
+  data: ITasksData | undefined
+  messageError?:
+    | {
+        error: string
+        message: string[]
+        statusCode: number
+      }
+    | Error
+  statusCode?: string
+}
+
+export type IUpdateTask = {
+  id: number
+  title: string
+  description: string
+  status: TaskStatus
+  icon: ITypeIcon
 }

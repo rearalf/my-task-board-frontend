@@ -158,11 +158,19 @@
               <span class="d-flex ga-2"> Delete <TrashSVG /> </span>
             </v-btn>
             <v-btn
+              v-if="taskForm.newTaskId === 0"
               @click="saveNewTask"
               class="rounded-xl text-white"
               style="background-color: #3662e3"
             >
-              <span class="d-flex ga-2" v-if="taskForm.newTaskId === 0"> Save <DoneRound /> </span>
+              <span class="d-flex ga-2"> Save <DoneRound /> </span>
+            </v-btn>
+            <v-btn
+              v-else
+              @click="handleUpdateTask"
+              class="rounded-xl text-white"
+              style="background-color: #3662e3"
+            >
               <span class="d-flex ga-2 align-center" v-if="taskForm.newTaskId !== 0">
                 Edit <EditDuotone fill="#FFF" />
               </span>
@@ -194,12 +202,14 @@ import TrashSVG from './icons/TrashSVG.vue'
 import useAlertStone from '../stores/useAlertStone'
 import taskService from '../api/task.service'
 import useTaskForm from '../stores/taskForm'
+import useTasksStone from '../stores/useTasksStone'
 
 const taskForm = useTaskForm()
 const alertStone = useAlertStone()
+const tasksStone = useTasksStone()
 
 const saveNewTask = async () => {
-  const result = await taskService.getNewTaskService({
+  const result = await taskService.createNewTaskService({
     title: taskForm.newTaskTitle,
     description: taskForm.newTaskDescription,
     icon: taskForm.newTaskIcon,
@@ -209,8 +219,28 @@ const saveNewTask = async () => {
     taskForm.handleCleanNewTask()
     taskForm.handleDrawer()
     alertStone.showAlert('Tarea creada.', 'success')
+    tasksStone.getAllTasks()
   } else {
-    alertStone.showAlert('Error al crear la tarea.', 'error')
+    if (result.messageError) {
+      let message = ''
+      for (const msg of result.messageError.message) {
+        if (msg.includes('title')) {
+          message = 'You must add a title.'
+          break
+        }
+        if (msg.includes('description')) {
+          message = 'You must add a description .'
+          break
+        }
+        if (msg.includes('icon')) {
+          message = 'You must add a icon .'
+          break
+        }
+      }
+      alertStone.showAlert(message, 'warning')
+    } else {
+      alertStone.showAlert('Error al crear la tarea.', 'error')
+    }
   }
 }
 
@@ -221,8 +251,53 @@ const deleteTask = async () => {
       alertStone.showAlert('Tarea eliminada.', 'success')
       taskForm.handleCleanNewTask()
       taskForm.handleDrawer()
+      tasksStone.getAllTasks()
     } else {
       alertStone.showAlert('Error al eliminar la tarea.', 'error')
+    }
+  } else {
+    alertStone.showAlert('Sin tarea seleccionada.', 'warning')
+  }
+}
+
+const handleUpdateTask = async () => {
+  if (taskForm.newTaskId) {
+    const result = await taskService.updateTaskService({
+      description: taskForm.newTaskDescription,
+      icon: taskForm.newTaskIcon,
+      title: taskForm.newTaskTitle,
+      id: Number(taskForm.newTaskId),
+      status: taskForm.newTaskStatus,
+    })
+
+    if (result.success) {
+      alertStone.showAlert('Tarea actualizada.', 'success')
+      taskForm.handleCleanNewTask()
+      taskForm.handleDrawer()
+      tasksStone.getAllTasks()
+    } else {
+      if (result.messageError) {
+        let message = ''
+        for (const msg of result.messageError.message) {
+          if (msg.includes('title')) {
+            message = 'You must add a title.'
+            break
+          }
+          if (msg.includes('description')) {
+            message = 'You must add a description .'
+            break
+          }
+          if (msg.includes('icon')) {
+            message = 'You must add a icon .'
+            break
+          }
+          if (msg.includes('property')) {
+            message = 'You must add a property.'
+            break
+          }
+        }
+        alertStone.showAlert(message, 'warning')
+      }
     }
   } else {
     alertStone.showAlert('Sin tarea seleccionada.', 'warning')
