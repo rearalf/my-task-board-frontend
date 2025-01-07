@@ -74,6 +74,7 @@ import DoneRoundDuotone from './icons/DoneRoundDuotone.vue'
 import TimeAtackDuotone from './icons/TimeAtackDuotone.vue'
 
 import useTaskForm from '../stores/taskForm'
+import type { ITypeIcon, TaskStatus } from '../interfaces/interfaces'
 const taskForm = useTaskForm()
 
 const props = defineProps({
@@ -108,7 +109,7 @@ const handleOpenDrawer = () => {
   taskForm.newTaskId = props.id
   taskForm.newTaskTitle = props.title
   taskForm.newTaskDescription = props.description
-  taskForm.newTaskIcon = props.icon
-  taskForm.newTaskStatus = props.state
+  taskForm.newTaskIcon = props.icon as ITypeIcon
+  taskForm.newTaskStatus = props.state as TaskStatus
 }
 </script>
